@@ -3,13 +3,17 @@ services:
     name: automotive-parts-analyzer
     env: node
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: OPENAI_API_KEY
         sync: false
       - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: NEXTAUTH_URL
+        value: https://sparefinder-ai-service.onrender.com
+      - key: NEXTAUTH_SECRET
         sync: false
     healthCheckPath: /api/health
