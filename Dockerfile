@@ -1,26 +1,23 @@
-FROM node:20-alpine
+# Use the official Node.js 18 image
+FROM node:18-alpine
 
+# Set the working directory
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Copy package files
+COPY package*.json ./
 
-# Install dependencies first for better caching
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
+# Install dependencies
+RUN npm ci --only=production
 
 # Copy the rest of the application
 COPY . .
 
-# Build the application without running migrations
-RUN pnpm build
+# Build the application
+RUN npm run build
 
-# Expose the port the app runs on
+# Expose the port
 EXPOSE 3000
 
-# Create a startup script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Start the application using the startup script
-CMD ["/start.sh"]
+# Start the application
+CMD ["npm", "start"]
